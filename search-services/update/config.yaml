@@ -1,0 +1,10 @@
+log_level: DEBUG
+update_address: :8080
+db_address: postgres://postgres:password@postgres:5432/postgres
+words_address: words:8080
+broker_address: nats://nats:4222
+xkcd:
+  url: https://xkcd.com
+  concurrency: 10
+  check_period: 1h
+  timeout: 10s

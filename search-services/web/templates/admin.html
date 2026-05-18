@@ -1,0 +1,75 @@
+{{define "admin.body"}}
+<section class="stack">
+  <div class="section-head">
+    <div class="lead">
+      <h1>Администрирование</h1>
+      <p class="muted">Управление индексом и сессией. Токен живёт {{.TokenTTL}}.</p>
+    </div>
+    <span class="badge mono">{{.Status}}</span>
+  </div>
+
+  {{if .Message}}
+    <div class="notice ok">{{.Message}}</div>
+  {{end}}
+  {{if .Error}}
+    <div class="notice error">{{.Error}}</div>
+  {{end}}
+
+  {{if .LoggedIn}}
+    <div class="grid-2">
+      <div class="card stack-sm">
+        <h2>Индекс</h2>
+        <p class="muted">Запуск или сброс индексации. Drop очищает базу.</p>
+        <div class="row" style="margin-top:6px;">
+          <form method="post" action="/admin/update">
+            <button class="btn-primary" type="submit">Запустить update</button>
+          </form>
+          <form method="post" action="/admin/drop">
+            <button class="btn-danger" type="submit">Drop</button>
+          </form>
+        </div>
+      </div>
+      <div class="card stack-sm">
+        <h2>Сессия</h2>
+        <p class="muted">JWT в HttpOnly cookie. TTL {{.TokenTTL}}.</p>
+        <form method="post" action="/admin/logout" style="margin-top:6px;">
+          <button type="submit">Выйти</button>
+        </form>
+      </div>
+    </div>
+  {{else}}
+    <form class="card" method="post" action="/admin/login">
+      <div class="login-row">
+        <div class="field">
+          <label for="name">Логин</label>
+          <input id="name" name="name" placeholder="admin" required>
+        </div>
+        <div class="field">
+          <label for="password">Пароль</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" required>
+        </div>
+        <button class="btn-primary" type="submit">Войти</button>
+      </div>
+    </form>
+  {{end}}
+
+  <div class="grid-2">
+    <div class="card">
+      <h2 style="margin-bottom:10px;">Статистика</h2>
+      {{if .Stats}}
+        <div class="kv"><span class="k">Комиксы (загружено / всего)</span><span class="v">{{.Stats.ComicsFetched}} / {{.Stats.ComicsTotal}}</span></div>
+        <div class="kv"><span class="k">Слов всего</span><span class="v">{{.Stats.WordsTotal}}</span></div>
+        <div class="kv"><span class="k">Уникальных слов</span><span class="v">{{.Stats.WordsUnique}}</span></div>
+      {{else}}
+        <p class="faint">Статистика недоступна.</p>
+      {{end}}
+    </div>
+    <div class="card stack-sm">
+      <h2>Подсказки</h2>
+      <p class="faint">— Update тянет XKCD и нормализует описания через words.</p>
+      <p class="faint">— Drop очищает базу и индекс. После drop запустите update.</p>
+      <p class="faint">— Stats и Status доступны без авторизации, update/drop требуют токен.</p>
+    </div>
+  </div>
+</section>
+{{end}}

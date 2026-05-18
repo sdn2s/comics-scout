@@ -1,0 +1,18 @@
+FROM golang:1.25 AS build
+
+WORKDIR /src
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY web ./web
+
+ENV CGO_ENABLED=0
+RUN go build -o /web ./web
+
+FROM alpine:3.20
+
+COPY --from=build /web /web
+COPY --from=build /src/web/config.yaml /config.yaml
+
+ENTRYPOINT [ "/web" ]

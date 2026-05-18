@@ -1,0 +1,56 @@
+{{define "search.body"}}
+<section class="stack">
+  <div class="section-head">
+    <div class="lead">
+      <h1>Поиск комиксов</h1>
+      <p class="muted">Фраза нормализуется и сопоставляется с индексом XKCD.</p>
+    </div>
+  </div>
+
+  <form class="card" method="get" action="/">
+    <div class="form-row">
+      <div class="field">
+        <label for="phrase">Фраза</label>
+        <input id="phrase" name="phrase" value="{{.Phrase}}" placeholder="linux, apple a day, russian hackers" autocomplete="off" required>
+      </div>
+      <div class="field">
+        <label for="limit">Лимит</label>
+        <input id="limit" name="limit" type="number" min="1" max="50" value="{{.Limit}}">
+      </div>
+      <div class="field">
+        <label for="mode">Источник</label>
+        <select id="mode" name="mode">
+          <option value="live" {{if ne .Mode "index"}}selected{{end}}>Live</option>
+          <option value="index" {{if eq .Mode "index"}}selected{{end}}>Index</option>
+        </select>
+      </div>
+      <button class="btn-primary" type="submit">Искать</button>
+    </div>
+  </form>
+
+  {{if .Error}}
+    <div class="notice error">{{.Error}}</div>
+  {{end}}
+  {{if .Message}}
+    <div class="notice">{{.Message}}</div>
+  {{end}}
+
+  {{if gt .Total 0}}
+    <div class="summary">
+      <span class="badge mono">{{.Total}}</span>
+      <span>результатов · показываем {{len .Comics}}</span>
+    </div>
+    <div class="grid-cards">
+      {{range .Comics}}
+        <a class="comic" href="{{.URL}}" target="_blank" rel="noreferrer">
+          <div class="thumb"><img src="{{.URL}}" alt="Комикс {{.ID}}" loading="lazy"></div>
+          <div class="meta">
+            <span class="badge mono">#{{.ID}}</span>
+            <span class="muted">xkcd.com</span>
+          </div>
+        </a>
+      {{end}}
+    </div>
+  {{end}}
+</section>
+{{end}}

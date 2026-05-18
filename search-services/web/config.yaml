@@ -1,0 +1,6 @@
+log_level: INFO
+address: :8080
+api_base_url: http://api:8080
+token_cookie: comic_token
+token_ttl: 2m
+request_timeout: 8s

@@ -1,0 +1,14 @@
+log_level: DEBUG
+
+token_ttl: 1m
+
+search_concurrency: 10
+search_rate: 100
+
+words_address: words:81
+update_address: update:82
+search_address: search:83
+
+api_server:
+  address: localhost:80
+  timeout: 5s
